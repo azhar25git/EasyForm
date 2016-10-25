@@ -7,6 +7,7 @@ class EasyFormField {
     private $name;
     private $type;
     private $attributes = [];
+    private $options = []; // only if type equals select
 
     /**
      * EasyFormField constructor.
@@ -27,6 +28,14 @@ class EasyFormField {
     public function setAttributes($attributes)
     {
         $this->attributes = $attributes;
+    }
+
+    /**
+     * @return array Attributes
+     */
+    public function getAttributes()
+    {
+        return $this->attributes;
     }
 
     /**
@@ -67,5 +76,34 @@ class EasyFormField {
     public function required()
     {
         $this->attributes['required'] = 'required';
+    }
+
+    /**
+     * Set select field options
+     *
+     * @param $optionsArray Array of instances of EasyFormSelectOption
+     * @throws \Exception If the field is not a select
+     */
+    public function setOptions($optionsArray)
+    {
+        if($this->type != 'select')
+            throw new \Exception('Trying to add options to a non-select field');
+        foreach ($optionsArray as $option) {
+            $this->options[] = $option;
+        }
+
+        return;
+    }
+
+    /**
+     * @return array
+     * @throws \Exception
+     */
+    public function getOptions()
+    {
+        if($this->type != 'select')
+            throw new \Exception('Trying to add options to a non-select field');
+
+        return $this->options;
     }
 }
