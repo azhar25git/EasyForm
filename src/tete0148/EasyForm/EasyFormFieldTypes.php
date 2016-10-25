@@ -28,7 +28,8 @@ class EasyFormFieldTypes {
         'time',
         'url',
         'week',
-        'textarea'
+        'textarea',
+        'select'
     ];
 
     public static function getTypes()
