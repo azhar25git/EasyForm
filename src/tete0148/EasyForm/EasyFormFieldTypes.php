@@ -34,6 +34,6 @@ class EasyFormFieldTypes {
 
     public static function getTypes()
     {
-        return self::types;
+        return self::$types;
     }
 }

@@ -28,10 +28,13 @@ class EasyFormField {
      * Set attributes array
      *
      * @param $attributes
+     * @return $this EasyFormField
      */
     public function setAttributes($attributes)
     {
         $this->attributes = $attributes;
+
+        return $this;
     }
 
     /**
@@ -57,29 +60,38 @@ class EasyFormField {
      * Set attribute class
      *
      * @param $class
+     * @return $this EasyFormField
      */
     public function setClass($class)
     {
         $this->attributes['class'] = $class;
+
+        return $this;
     }
 
     /**
      * Set field id
      *
      * @param $id
+     * @return $this EasyFormField
      */
     public function setId($id)
     {
         $this->attributes['id'] = $id;
+
+        return $this;
     }
 
     /**
      * Make field required
      *
+     * @return $this EasyFormField
      */
     public function required()
     {
         $this->attributes['required'] = 'required';
+
+        return $this;
     }
 
     /**
@@ -87,6 +99,7 @@ class EasyFormField {
      *
      * @param $optionsArray Array of instances of EasyFormSelectOption
      * @throws \Exception If the field is not a select
+     * @return $this EasyFormField
      */
     public function setOptions($optionsArray)
     {
@@ -96,7 +109,7 @@ class EasyFormField {
             $this->options[] = $option;
         }
 
-        return;
+        return $this;
     }
 
     /**
