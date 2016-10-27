@@ -2,14 +2,21 @@
 
 namespace tete0148\EasyForm;
 
+use tete0148\EasyForm\Validator\Validator;
+
 class EasyForm {
+
+    private static $LANG = 'en';
+    private static $resourcesPath = __DIR__ . '/../../resources';
 
     private $name;
     private $method;
     private $url;
     private $fields = [];
     private $allowFiles = false;
-    private $resourcesPath = __DIR__ . '/../../resources';
+    private $validated = false;
+    private $validator;
+    //private $resourcesPathCustom = NULL;
 
     /**
      * EasyForm constructor.
@@ -40,13 +47,35 @@ class EasyForm {
     }
 
     /**
+     * Validate form contents
+     *
+     * @param $data array
+     * @return bool
+     */
+    public function validate($data)
+    {
+        $this->validator = new Validator();
+        $validated = true;
+        foreach ($this->fields as $field) {
+            $rules = $field->getRules();
+            foreach ($rules as $rule) {
+                $validated = $rule->validate($data[$this->name][$field->getName()]);
+                $this->validator->addValidated($rule->getName(), $validated);
+            }
+        }
+        $this->validated = $validated;
+
+        return $this->validated;
+    }
+
+    /**
      * Render form
      *
      * @return string
      */
     public function render()
     {
-        $formTemplate = file_get_contents($this->resourcesPath . '/templates/form.html.twig');
+        $formTemplate = file_get_contents(self::$resourcesPath . '/templates/form.html.twig');
         $formTemplate = str_replace('{{ method }}', 'method="'.$this->method .'"', $formTemplate);
         $formTemplate = str_replace('{{ action }}', 'action="'.$this->url .'"', $formTemplate);
         $formTemplate = str_replace('{{ enctype }}', ($this->allowFiles) ? 'enctype="multipart/form-data"' : '', $formTemplate);
@@ -74,11 +103,11 @@ class EasyForm {
         $attributes = $field->getAttributes();
         $template = '';
         if($type == 'textarea') {
-            $template = file_get_contents($this->resourcesPath . '/templates/textarea.html.twig');
+            $template = file_get_contents(self::$resourcesPath . '/templates/textarea.html.twig');
             //custom replacements
         }
         else if($type == 'select') {
-            $template = file_get_contents($this->resourcesPath . '/templates/select.html.twig');
+            $template = file_get_contents(self::$resourcesPath . '/templates/select.html.twig');
             //custom replacements
             $options_str = '';
             $options = $field->getOptions();
@@ -89,10 +118,10 @@ class EasyForm {
             $template = str_replace('{{ options }}', $options_str, $template);
         }
         else if($type == 'submit') {
-            $template = file_get_contents($this->resourcesPath . '/templates/submit.html.twig');
+            $template = file_get_contents(self::$resourcesPath . '/templates/submit.html.twig');
         }
         else {
-            $template = file_get_contents($this->resourcesPath . '/templates/input.html.twig');
+            $template = file_get_contents(self::$resourcesPath . '/templates/input.html.twig');
             $template = str_replace('{{ type }}', 'type="' . $type . '"', $template);
         }
         //global replacements
@@ -124,4 +153,54 @@ class EasyForm {
         $template = str_replace('{{ name }}', 'name="'.$this->name . '[' . $field->getName() . ']"', $template);
         return $template;
     }
+
+    /**
+     * @return string
+     */
+    public static function getLang()
+    {
+        return self::$LANG;
+    }
+
+    /**
+     * @param $lang
+     */
+    public static function setLang($lang)
+    {
+        self::$LANG = $lang;
+    }
+
+    /**
+     * @return string
+     */
+    public static function getResourcesPath()
+    {
+        return self::$resourcesPath;
+    }
+
+    /**
+     * @param string $resourcesPath
+     */
+    public static function setResourcesPath($resourcesPath)
+    {
+        self::$resourcesPath = $resourcesPath;
+    }
+
+    /**
+     * @return Name
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Return validator errors text
+     *
+     */
+    public function getErrors()
+    {
+        return $this->validator->getErrors();
+    }
+
 }

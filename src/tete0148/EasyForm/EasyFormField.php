@@ -8,6 +8,7 @@ class EasyFormField {
     private $type;
     private $attributes = [];
     private $options = []; // only if type equals select
+    private $rules = [];
 
     /**
      * EasyFormField constructor.
@@ -50,10 +51,13 @@ class EasyFormField {
      *
      * @param $attribute
      * @param $value
+     * @return $this EasyFormField
      */
     public function addAttribute($attribute, $value)
     {
         $this->attributes[$attribute] = $value;
+
+        return $this;
     }
 
     /**
@@ -142,5 +146,28 @@ class EasyFormField {
     public function getType()
     {
         return $this->type;
+    }
+
+    /**
+     * Add a rule to the field
+     *
+     * @param $rule Rule
+     * @return $this EasyFormField
+     */
+    public function addRule($rule)
+    {
+        $this->rules[] = $rule;
+
+        return $this;
+    }
+
+    /**
+     * Get field rules
+     *
+     * @return array
+     */
+    public function getRules()
+    {
+        return $this->rules;
     }
 }
