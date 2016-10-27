@@ -1,4 +1,6 @@
-<?php require_once '../vendor/autoload.php'; ?>
+<?php use tete0148\EasyForm\Validator\Rules\EmailRule;
+
+require_once '../vendor/autoload.php'; ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,10 +13,11 @@
     <h1>EasyForm</h1>
     <?php
         $easyform = new \tete0148\EasyForm\EasyForm('demo');
-        $easyform->addField('test', 'email')
+        $easyform->addField('test', 'text')
                         ->setClass('test')
                         ->required()
-                        ->addAttribute('autocomplete', 'off');
+                        ->addAttribute('autocomplete', 'off')
+                        ->addRule(new EmailRule());
         $field = $easyform->addField('ville', 'select');
 
         $cities_array = array (
@@ -115,6 +118,11 @@
         $easyform->addField('comment', 'textarea')
                         ->setId('commentInput');
         $easyform->addField('submit', 'submit')->setAttributes(['value' => 'Submit']);
+
+        if(isset($_POST[$easyform->getName()])) {
+            var_dump($easyform->validate($_POST));
+            var_dump($easyform->getErrors());
+        }
 
         echo $easyform->render();
     ?>
