@@ -5,16 +5,23 @@ namespace tete0148\EasyForm;
 class EasyForm {
 
     private $name;
+    private $method;
+    private $url;
     private $fields = [];
-    private $resourcesPath = '../../resources';
+    private $allowFiles = false;
+    private $resourcesPath = __DIR__ . '/../../resources';
 
     /**
      * EasyForm constructor.
      * @param $name Name of the form
+     * @param string $url
+     * @param string $method
      */
-    public function __construct($name)
+    public function __construct($name, $url = '', $method = 'POST')
     {
         $this->name = $name;
+        $this->method = $method;
+        $this->url = $url;
     }
 
     /**
@@ -33,34 +40,88 @@ class EasyForm {
     }
 
     /**
+     * Render form
+     *
+     * @return string
+     */
+    public function render()
+    {
+        $formTemplate = file_get_contents($this->resourcesPath . '/templates/form.html.twig');
+        $formTemplate = str_replace('{{ method }}', 'method="'.$this->method .'"', $formTemplate);
+        $formTemplate = str_replace('{{ action }}', 'action="'.$this->url .'"', $formTemplate);
+        $formTemplate = str_replace('{{ enctype }}', ($this->allowFiles) ? 'enctype="multipart/form-data"' : '', $formTemplate);
+        $fieldsTemplate = '';
+        $fields = $this->fields;
+
+        foreach ($fields as $field) {
+            $fieldsTemplate .= $this->renderField($field);
+        }
+        $formTemplate = str_replace('{{ fields }}', $fieldsTemplate, $formTemplate);
+
+
+        return $formTemplate;
+    }
+
+    /**
      * Render a field as html
      *
-     * @param $field string The field to render
+     * @param $field EasyFormField The field to render
      * @return string The field as HTML
      */
     public function renderField($field)
     {
-        $html = '';
         $type = $field->getType();
         $attributes = $field->getAttributes();
+        $template = '';
         if($type == 'textarea') {
             $template = file_get_contents($this->resourcesPath . '/templates/textarea.html.twig');
             //custom replacements
-        } else if($type == 'select') {
+        }
+        else if($type == 'select') {
             $template = file_get_contents($this->resourcesPath . '/templates/select.html.twig');
             //custom replacements
             $options_str = '';
             $options = $field->getOptions();
+
             foreach($options as $option) {
-                $options_str = $options_str . '<option value="'.$option->getValue().'"'. ($option->isSelected())? 'selected>' : '' . $option->getPlaceholder() . '</option>';
+                $options_str .= '<option value="'.$option->getValue().'"'. (($option->isSelected())? 'selected>' : '>' . $option->getPlaceholder()) . '</option>';
             }
             $template = str_replace('{{ options }}', $options_str, $template);
-        } else {
-            $template = file_get_contents($this->resourcesPath . '/templates/input.html.twig');
         }
-        //default replacements
-        $template = str_replace('{{ class }}', 'class="'. $attributes['class'] .'"', $template);
-            unset($attributes['class']);
-        return $html;
+        else if($type == 'submit') {
+            $template = file_get_contents($this->resourcesPath . '/templates/submit.html.twig');
+        }
+        else {
+            $template = file_get_contents($this->resourcesPath . '/templates/input.html.twig');
+            $template = str_replace('{{ type }}', 'type="' . $type . '"', $template);
+        }
+        //global replacements
+
+        //id
+        $template = str_replace('{{ id }}', (isset($attributes['id']) ? 'id="' . $attributes['id'] . '"' : ''), $template);
+        unset($attributes['id']);
+
+        //class
+        $template = str_replace('{{ classes }}', (isset($attributes['class']) ? $attributes['class'] : ''), $template);
+        unset($attributes['class']);
+
+        //required
+        $template = str_replace('{{ required }}', (isset($attributes['required']) ? 'required="required"' : ''), $template);
+        unset($attributes['required']);
+
+        //value
+        $template = str_replace('{{ value }}', (isset($attributes['value']) ? $attributes['value'] : ''), $template);
+        unset($attributes['value']);
+
+        //other attributes
+        $attributesTemplate = '';
+        foreach ($attributes as $k => $attribute) {
+            $attributesTemplate .= $k . '="' . $attribute .'" ';
+        }
+        $template = str_replace('{{ attributes }}', $attributesTemplate, $template);
+
+
+        $template = str_replace('{{ name }}', 'name="'.$this->name . '[' . $field->getName() . ']"', $template);
+        return $template;
     }
 }
