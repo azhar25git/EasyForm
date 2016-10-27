@@ -13,5 +13,7 @@
             "tete0148\\EasyForm\\": "src/tete0148/EasyForm"
         }
     },
-    "require": {}
+    "require": {
+        "symfony/yaml": "^3.1"
+    }
 }
