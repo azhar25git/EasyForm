@@ -13,11 +13,15 @@ class EasyFormField {
      * EasyFormField constructor.
      * @param $name
      * @param $type
+     * @throws \Exception
      */
     public function __construct($name, $type)
     {
         $this->name = $name;
-        $this->type = $type;
+        if(in_array($type, EasyFormFieldTypes::getTypes()))
+            $this->type = $type;
+        else
+            throw new \Exception('Unknown field type "' . $type . '"');
     }
 
     /**
@@ -105,5 +109,25 @@ class EasyFormField {
             throw new \Exception('Trying to add options to a non-select field');
 
         return $this->options;
+    }
+
+    /**
+     * Get field's name
+     *
+     * @return mixed
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Get field type
+     *
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
     }
 }
