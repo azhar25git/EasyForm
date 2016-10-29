@@ -16,6 +16,6 @@ class EmailRule extends Rule
      */
     public function validate($content)
     {
-        return filter_var($content, FILTER_VALIDATE_EMAIL);
+        return filter_var($content, FILTER_VALIDATE_EMAIL) !== FALSE;
     }
 }
