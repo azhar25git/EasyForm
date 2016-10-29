@@ -29,13 +29,19 @@ class EasyFormField extends HTMLElement {
 
     /**
      * Add a label to the field
+     * You can set the label from an EasyFormLabel instance or from the label's value (but you won't be able to change classes, id, or other html attributes)
      *
-     * @param $label EasyFormLabel
+     * @param $label EasyFormLabel|string
      * @return $this EasyFormField
      */
     public function setLabel($label)
     {
-        $this->label = $label;
+        if($label instanceof EasyFormLabel)
+            $this->label = $label;
+        else {
+            $this->label= new EasyFormLabel();
+            $this->label->setValue($label);
+        }
 
         return $this;
     }
