@@ -2,13 +2,15 @@
 
 namespace tete0148\EasyForm;
 
-class EasyFormField {
+use tete0148\EasyForm\Validator\Rules\Rule;
+
+class EasyFormField extends HTMLElement {
 
     private $name;
     private $type;
-    private $attributes = [];
     private $options = []; // only if type equals select
     private $rules = [];
+    private $label = NULL;
 
     /**
      * EasyFormField constructor.
@@ -26,64 +28,21 @@ class EasyFormField {
     }
 
     /**
-     * Set attributes array
+     * Add a label to the field
      *
-     * @param $attributes
+     * @param $label EasyFormLabel
      * @return $this EasyFormField
      */
-    public function setAttributes($attributes)
+    public function setLabel($label)
     {
-        $this->attributes = $attributes;
+        $this->label = $label;
 
         return $this;
     }
 
-    /**
-     * @return array Attributes
-     */
-    public function getAttributes()
+    public function getLabel()
     {
-        return $this->attributes;
-    }
-
-    /**
-     * Add an attribute
-     *
-     * @param $attribute
-     * @param $value
-     * @return $this EasyFormField
-     */
-    public function addAttribute($attribute, $value)
-    {
-        $this->attributes[$attribute] = $value;
-
-        return $this;
-    }
-
-    /**
-     * Set attribute class
-     *
-     * @param $class
-     * @return $this EasyFormField
-     */
-    public function setClass($class)
-    {
-        $this->attributes['class'] = $class;
-
-        return $this;
-    }
-
-    /**
-     * Set field id
-     *
-     * @param $id
-     * @return $this EasyFormField
-     */
-    public function setId($id)
-    {
-        $this->attributes['id'] = $id;
-
-        return $this;
+        return $this->label;
     }
 
     /**

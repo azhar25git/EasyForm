@@ -1,4 +1,21 @@
 en:
   email: "Incorrect email address"
+  required: "This field is required"
+  alphanumeric: "This field must contains alphanumeric characters only"
+  alpha: "This field must contains letters only (a-z, A-Z)"
+  numeric: "This field must contains numbers only"
+  regex: "Incorrect format"
+  length: "This must be %0 long"
+  minlength: "This field must be %0 minimum"
+  maxlength: "This field must be %0 maximum"
+
 fr:
   email: "Adresse email incorrecte"
+  required: "This field is required"
+  alphanumeric: "Ce champ ne doit contenir que des caractères alphanumériques"
+  alpha: "Ce champ ne doit contenir que des lettres (a-z, A-Z)"
+  numeric: "Ce champ ne doit contenir que des chiffres"
+  regex: "Ce champ est incorrect"
+  length: "Ce champ doit contenir %0 caractères"
+  minlength: "Ce champ doit faire plus de %0 caractères"
+  minlength: "Ce champ doit faire moins de %0 caractères"
