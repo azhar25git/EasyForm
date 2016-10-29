@@ -26,6 +26,6 @@ class RegexRule extends  Rule
      */
     public function validate($content)
     {
-        return preg_match($this->regex, $content);
+        return preg_match($this->regex, $content) === 1;
     }
 }

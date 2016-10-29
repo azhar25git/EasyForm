@@ -17,7 +17,7 @@ class NumericRule extends Rule
      */
     public function validate($content)
     {
-        $regex = '#[^0-9]*#';
+        $regex = '#[^0-9]#';
         return preg_match($regex , $content) !== 1 AND preg_match($regex, $content) === 0;
     }
 }

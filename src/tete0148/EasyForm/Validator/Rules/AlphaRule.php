@@ -17,7 +17,7 @@ class AlphaRule extends Rule
      */
     function validate($content)
     {
-        $regex = '#[^a-zA-Z]*#';
+        $regex = '#[^a-zA-Z]#';
         return preg_match($regex , $content) !== 1 AND preg_match($regex, $content) === 0;
     }
 }
