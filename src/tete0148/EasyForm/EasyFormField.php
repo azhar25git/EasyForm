@@ -59,6 +59,7 @@ class EasyFormField extends HTMLElement {
     public function required()
     {
         $this->attributes['required'] = 'required';
+        $this->addRule('required');
 
         return $this;
     }
