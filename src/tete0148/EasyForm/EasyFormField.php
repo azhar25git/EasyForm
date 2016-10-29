@@ -2,6 +2,8 @@
 
 namespace tete0148\EasyForm;
 
+use tete0148\EasyForm\Validator\Rules\Rule;
+
 class EasyFormField {
 
     private $name;

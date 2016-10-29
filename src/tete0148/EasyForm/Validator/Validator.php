@@ -16,13 +16,19 @@ class Validator
      */
     public function getErrors()
     {
-        return $this->getTranslation('email');
+        $errors = [];
+        foreach ($this->validated as $rule => $correct) {
+            if(!$correct) {
+                $errors[$rule] = $this->getTranslation($rule);
+            }
+        }
+        return $errors;
     }
 
     private function getTranslation($rule)
     {
         $yaml = Yaml::parse(file_get_contents(EasyForm::getResourcesPath() . '/lang/validator_errors.yaml'));
-        return $yaml[EasyForm::getLang()];
+        return $yaml[EasyForm::getLang()][$rule];
     }
 
     /**

@@ -1,5 +1,5 @@
-<?php use tete0148\EasyForm\Validator\Rules\EmailRule;
-
+<?php use tete0148\EasyForm\Validator\Rules\AlphanumericRule;
+use tete0148\EasyForm\Validator\Rules\EmailRule;
 require_once '../vendor/autoload.php'; ?>
 <!DOCTYPE html>
 <html>
@@ -18,8 +18,13 @@ require_once '../vendor/autoload.php'; ?>
                         ->required()
                         ->addAttribute('autocomplete', 'off')
                         ->addRule(new EmailRule());
-        $field = $easyform->addField('ville', 'select');
 
+        $easyform->addField('alphanumeric', 'text')
+                        ->setClass('test class2')
+                        ->required()
+                        ->addRule(new AlphanumericRule());
+
+        $field = $easyform->addField('ville', 'select');
         $cities_array = array (
           0 =>
           array (
@@ -110,6 +115,8 @@ require_once '../vendor/autoload.php'; ?>
             'longitude' => '55.9432',
           ),);
         $options = [];
+
+        //filling select's options
         foreach($cities_array as $index => $city) {
             $options[] = new \tete0148\EasyForm\EasyFormSelectOption($index, $city['city']);
         }
@@ -119,11 +126,14 @@ require_once '../vendor/autoload.php'; ?>
                         ->setId('commentInput');
         $easyform->addField('submit', 'submit')->setAttributes(['value' => 'Submit']);
 
+        //validating form
+        $easyform->validate($_POST);
+
         if(isset($_POST[$easyform->getName()])) {
-            var_dump($easyform->validate($_POST));
             var_dump($easyform->getErrors());
         }
 
+        //display form
         echo $easyform->render();
     ?>
 </div>

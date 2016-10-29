@@ -15,7 +15,7 @@ class EasyForm {
     private $fields = [];
     private $allowFiles = false;
     private $validated = false;
-    private $validator;
+    private $validator = NULL;
     //private $resourcesPathCustom = NULL;
 
     /**
@@ -200,6 +200,9 @@ class EasyForm {
      */
     public function getErrors()
     {
+        if($this->validator === NULL) {
+            throw new \Exception('You must validate the form before trying to get errors');
+        }
         return $this->validator->getErrors();
     }
 
