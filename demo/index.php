@@ -1,4 +1,7 @@
-<?php use tete0148\EasyForm\Validator\Rules\AlphanumericRule;
+<?php use tete0148\EasyForm\EasyForm;
+use tete0148\EasyForm\EasyFormLabel;
+use tete0148\EasyForm\Validator\Rules\AlphanumericRule;
+use tete0148\EasyForm\Validator\Rules\AlphaRule;
 use tete0148\EasyForm\Validator\Rules\EmailRule;
 require_once '../vendor/autoload.php'; ?>
 <!DOCTYPE html>
@@ -12,19 +15,27 @@ require_once '../vendor/autoload.php'; ?>
 <div class="container">
     <h1>EasyForm</h1>
     <?php
-        $easyform = new \tete0148\EasyForm\EasyForm('demo');
-        $easyform->addField('test', 'text')
-                        ->setClass('test')
+        $easyform = new EasyForm('demo');
+        $label = new EasyFormLabel();
+        $label->setValue('Your last name:');
+        $easyform->addField('lname', 'text')
                         ->required()
                         ->addAttribute('autocomplete', 'off')
-                        ->addRule(new EmailRule());
+                        ->addRule(new AlphaRule())
+                        ->setLabel($label);
 
-        $easyform->addField('alphanumeric', 'text')
-                        ->setClass('test class2')
+        $label = new EasyFormLabel();
+        $label->setValue('Your first name:');
+        $easyform->addField('fname', 'text')
                         ->required()
-                        ->addRule(new AlphanumericRule());
+                        ->addAttribute('autocomplete', 'off')
+                        ->addRule(new AlphaRule())
+                        ->setLabel($label);
 
-        $field = $easyform->addField('ville', 'select');
+        $label = new EasyFormLabel();
+        $label->setValue('Your city:');
+        $field = $easyform->addField('city', 'select')
+                                ->setLabel($label);
         $cities_array = array (
           0 =>
           array (
@@ -122,11 +133,14 @@ require_once '../vendor/autoload.php'; ?>
         }
         $field->setOptions($options);
 
+        $label = new EasyFormLabel();
+        $label->setValue('Your message:');
         $easyform->addField('comment', 'textarea')
-                        ->setId('commentInput');
+                        ->setLabel($label);
         $easyform->addField('submit', 'submit')->setAttributes(['value' => 'Submit']);
 
         //validating form
+        if(isset($_POST[$easyform->getName()]))
         $easyform->validate($_POST);
 
         if(isset($_POST[$easyform->getName()])) {

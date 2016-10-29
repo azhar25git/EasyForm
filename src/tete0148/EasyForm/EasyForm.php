@@ -94,13 +94,16 @@ class EasyForm {
     /**
      * Render a field as html
      *
-     * @param $field EasyFormField The field to render
+     * @param $element HTMLElement The field to render
      * @return string The field as HTML
      */
-    public function renderField($field)
+    public function renderField($element)
     {
-        $type = $field->getType();
-        $attributes = $field->getAttributes();
+        $type = '';
+        if($element instanceof EasyFormField)
+            $type = $element->getType();
+
+        $attributes = $element->getAttributes();
         $template = '';
         if($type == 'textarea') {
             $template = file_get_contents(self::$resourcesPath . '/templates/textarea.html.twig');
@@ -110,7 +113,7 @@ class EasyForm {
             $template = file_get_contents(self::$resourcesPath . '/templates/select.html.twig');
             //custom replacements
             $options_str = '';
-            $options = $field->getOptions();
+            $options = $element->getOptions();
 
             foreach($options as $option) {
                 $options_str .= '<option value="'.$option->getValue().'"'. (($option->isSelected())? 'selected>' : '>' . $option->getPlaceholder()) . '</option>';
@@ -119,6 +122,9 @@ class EasyForm {
         }
         else if($type == 'submit') {
             $template = file_get_contents(self::$resourcesPath . '/templates/submit.html.twig');
+        }
+        else if($element instanceof EasyFormLabel) {
+            $template = file_get_contents(EasyForm::getResourcesPath() . '/templates/label.html.twig');
         }
         else {
             $template = file_get_contents(self::$resourcesPath . '/templates/input.html.twig');
@@ -142,6 +148,18 @@ class EasyForm {
         $template = str_replace('{{ value }}', (isset($attributes['value']) ? $attributes['value'] : ''), $template);
         unset($attributes['value']);
 
+        if($element instanceof EasyFormField && $element->getLabel() != NULL) {
+            $label = $element->getLabel();
+            $labelTemplate = $this->renderField($label);
+            $template = str_replace('{{ label }}', $labelTemplate, $template);
+        } else {
+            $template = str_replace('{{ label }}', '', $template);
+        }
+
+
+        if($element instanceof EasyFormField)
+            $template = str_replace('{{ name }}', 'name="'.$this->name . '[' . $element->getName() . ']"', $template);
+
         //other attributes
         $attributesTemplate = '';
         foreach ($attributes as $k => $attribute) {
@@ -150,7 +168,6 @@ class EasyForm {
         $template = str_replace('{{ attributes }}', $attributesTemplate, $template);
 
 
-        $template = str_replace('{{ name }}', 'name="'.$this->name . '[' . $field->getName() . ']"', $template);
         return $template;
     }
 
