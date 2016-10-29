@@ -2,7 +2,7 @@ en:
   email: "Incorrect email address"
   required: "This field is required"
   alphanumeric: "This field must contains alphanumeric characters only"
-  alpharule: "This field must contains letters only (a-z, A-Z)"
+  alpha: "This field must contains letters only (a-z, A-Z)"
   numeric: "This field must contains numbers only"
   regex: "Incorrect format"
   length: "This must be %0 long"
