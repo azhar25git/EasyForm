@@ -2,6 +2,7 @@
 
 namespace tete0148\EasyForm;
 
+use tete0184\EasyForm\Validator\Rules\RequiredRule;
 use tete0148\EasyForm\Validator\Rules\Rule;
 
 class EasyFormField extends HTMLElement {
@@ -59,7 +60,7 @@ class EasyFormField extends HTMLElement {
     public function required()
     {
         $this->attributes['required'] = 'required';
-        $this->addRule('required');
+        $this->addRule(new RequiredRule());
 
         return $this;
     }
