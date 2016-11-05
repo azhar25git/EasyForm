@@ -15,6 +15,9 @@ class EasyForm {
     private $fields = [];
     private $allowFiles = false;
     private $validated = false;
+    /**
+     * @var Validator
+     */
     private $validator = NULL;
     //private $resourcesPathCustom = NULL;
 
@@ -60,7 +63,7 @@ class EasyForm {
             $rules = $field->getRules();
             foreach ($rules as $rule) {
                 $validated = $rule->validate($data[$this->name][$field->getName()]);
-                $this->validator->addValidated($rule->getName(), $validated);
+                $this->validator->addValidated($field->getName(), $rule->getName(), $validated);
             }
         }
         $this->validated = $validated;

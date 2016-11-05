@@ -17,9 +17,10 @@ class Validator
     public function getErrors()
     {
         $errors = [];
-        foreach ($this->validated as $rule => $correct) {
-            if(!$correct) {
-                $errors[$rule] = $this->getTranslation($rule);
+        foreach ($this->validated as $field => $rules) {
+            foreach ($rules as $rule => $correct) {
+                if(!$correct)
+                    $errors[$field][$rule] = $this->getTranslation($rule);
             }
         }
         return $errors;
@@ -32,11 +33,12 @@ class Validator
     }
 
     /**
+     * @param $fieldName
      * @param $ruleName
      * @param $validated
      */
-    public function addValidated($ruleName, $validated)
+    public function addValidated($fieldName, $ruleName, $validated)
     {
-        $this->validated[$ruleName] = $validated;
+        $this->validated[$fieldName][$ruleName] = $validated;
     }
 }
