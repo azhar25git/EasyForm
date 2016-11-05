@@ -119,7 +119,7 @@ class EasyForm {
             $options = $element->getOptions();
 
             foreach($options as $option) {
-                $options_str .= '<option value="'.$option->getValue().'"'. (($option->isSelected())? 'selected>' : '>' . $option->getPlaceholder()) . '</option>';
+                $options_str .= '<option value="'.$option->getValue().'"'. (($option->isSelected())? 'selected>' : '>') . $option->getPlaceholder() . '</option>';
             }
             $template = str_replace('{{ options }}', $options_str, $template);
         }
