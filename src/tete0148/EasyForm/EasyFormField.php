@@ -137,4 +137,12 @@ class EasyFormField extends HTMLElement {
     {
         return $this->rules;
     }
+
+    /**
+     * @param $value string Set the field's value
+     */
+    public function setValue($value)
+    {
+        $this->attributes['value'] = $value;
+    }
 }
