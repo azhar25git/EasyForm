@@ -226,4 +226,16 @@ class EasyForm {
         return $this->validator->getErrors();
     }
 
+    /**
+     * @param $field string The field name
+     * @param $error string The error message
+     * @return $this EasyForm
+     */
+    public function addError($field, $error)
+    {
+        $this->validator->addError($field, $error);
+
+        return $this;
+    }
+
 }

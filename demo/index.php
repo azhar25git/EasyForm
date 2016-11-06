@@ -144,7 +144,9 @@ require_once '../vendor/autoload.php'; ?>
         var_dump($easyform->validate($_POST));
 
         if(isset($_POST[$easyform->getName()])) {
-            var_dump($easyform->getErroErs());
+
+            var_dump($easyform->getErrors());
+
         }
 
         //display form
