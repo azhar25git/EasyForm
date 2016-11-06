@@ -8,6 +8,7 @@ use tete0148\EasyForm\EasyForm;
 class Validator
 {
     private $validated = [];
+    private $errors = [];
 
     /**
      * Return an bidimensional error array, with one index for each field
@@ -16,14 +17,25 @@ class Validator
      */
     public function getErrors()
     {
-        $errors = [];
         foreach ($this->validated as $field => $rules) {
             foreach ($rules as $rule => $correct) {
                 if(!$correct)
-                    $errors[$field][$rule] = $this->getTranslation($rule);
+                    $this->errors[$field][$rule] = $this->getTranslation($rule);
             }
         }
-        return $errors;
+        return $this->errors;
+    }
+
+    /**
+     * @param $field string The field name
+     * @param $error string The error message
+     * @return $this Validator
+     */
+    public function addError($field, $error)
+    {
+        $this->errors[$field][] = $error;
+
+        return $this;
     }
 
     private function getTranslation($rule)
