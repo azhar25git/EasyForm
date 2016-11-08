@@ -141,12 +141,10 @@ require_once '../vendor/autoload.php'; ?>
 
         //validating form
         if(isset($_POST[$easyform->getName()]))
-        var_dump($easyform->validate($_POST));
+        echo ($easyform->validate($_POST)) ? 'Formulaire valide<br>' : 'Formulaire invalide</br>';
 
         if(isset($_POST[$easyform->getName()])) {
-
-            var_dump($easyform->getErrors());
-
+            echo 'There are errors';
         }
 
         //display form

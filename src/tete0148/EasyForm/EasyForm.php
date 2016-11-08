@@ -14,7 +14,7 @@ class EasyForm {
     private $url;
     private $fields = [];
     private $allowFiles = false;
-    private $validated = false;
+    private $validated = null;
     /**
      * @var Validator
      */
@@ -81,6 +81,23 @@ class EasyForm {
         $formTemplate = file_get_contents(self::$resourcesPath . '/templates/form.html.twig');
         $formTemplate = str_replace('{{ method }}', 'method="'.$this->method .'"', $formTemplate);
         $formTemplate = str_replace('{{ action }}', 'action="'.$this->url .'"', $formTemplate);
+
+        if($this->validated !== null) {
+            $errorsTemplate = file_get_contents(self::$resourcesPath . '/templates/errors.html.twig');
+            $errors = '<ul>';
+            foreach ($this->validator->getErrors() as $field) {
+                foreach ($field as $error) {
+                    $errors .= '<li>' . $error . '</li>';
+                }
+            }
+            $errors .= '</ul>';
+            $errorsTemplate = str_replace('{{ errors }}', $errors, $errorsTemplate);
+            $formTemplate = str_replace('{{ errors }}', $errorsTemplate, $formTemplate);
+        } else {
+            $formTemplate = str_replace('{{ errors }}', '', $formTemplate);
+        }
+
+
         $formTemplate = str_replace('{{ enctype }}', ($this->allowFiles) ? 'enctype="multipart/form-data"' : '', $formTemplate);
         $fieldsTemplate = '';
         $fields = $this->fields;
@@ -151,6 +168,18 @@ class EasyForm {
         $template = str_replace('{{ value }}', (isset($attributes['value']) ? $attributes['value'] : ''), $template);
         unset($attributes['value']);
 
+        //errors
+        if($element instanceof EasyFormField && $this->validated !== null && isset($this->getErrors()[$element->getName()])) {
+            $errorsTemplate = file_get_contents(self::$resourcesPath . '/templates/errors.html.twig');
+            $errors = '<ul>';
+            foreach ($this->getErrors()[$element->getName()] as $error) {
+                $errors .= '<li>' . $error . '</li>';
+            }
+            $errors .= '</ul>';
+            $errorsTemplate = str_replace('{{ errors }}', $errors, $errorsTemplate);
+            $template = str_replace('{{ errors }}', $errorsTemplate, $template);
+        }
+
         if($element instanceof EasyFormField && $element->getLabel() != NULL) {
             $label = $element->getLabel();
             $labelTemplate = $this->renderField($label);
@@ -169,6 +198,8 @@ class EasyForm {
             $attributesTemplate .= $k . '="' . $attribute .'" ';
         }
         $template = str_replace('{{ attributes }}', $attributesTemplate, $template);
+
+        $template = preg_replace('/{{ [A-Za-z0-9_]+ }}/', '', $template);
 
 
         return $template;
