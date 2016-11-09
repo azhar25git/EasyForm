@@ -16,8 +16,7 @@ class RequiredRule extends Rule
      */
     public function validate($content)
     {
-        if($content === 0 || $content === '0')
-            return true;
-        return !is_null($content) && isset($content) && !empty($content);
+        $condition = !is_null($content) && isset($content) && (!empty($content) || strlen(strval($content)) > 0);
+        return $condition;
     }
 }
