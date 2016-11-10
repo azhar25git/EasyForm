@@ -1,5 +1,6 @@
 <?php use tete0148\EasyForm\EasyForm;
 use tete0148\EasyForm\EasyFormLabel;
+use tete0148\EasyForm\EasyFormSelectOption;
 use tete0148\EasyForm\Validator\Rules\AlphanumericRule;
 use tete0148\EasyForm\Validator\Rules\AlphaRule;
 use tete0148\EasyForm\Validator\Rules\EmailRule;
@@ -21,7 +22,6 @@ require_once '../vendor/autoload.php'; ?>
         $easyform->addField('lname', 'text')
                         ->required()
                         ->addAttribute('autocomplete', 'off')
-                        ->addRule(new AlphaRule())
                         ->setLabel($label);
 
         $label = new EasyFormLabel();
@@ -29,7 +29,6 @@ require_once '../vendor/autoload.php'; ?>
         $easyform->addField('fname', 'text')
                         ->required()
                         ->addAttribute('autocomplete', 'off')
-                        ->addRule(new AlphaRule())
                         ->setLabel($label);
 
         $label = new EasyFormLabel();
@@ -129,25 +128,26 @@ require_once '../vendor/autoload.php'; ?>
 
         //filling select's options
         foreach($cities_array as $index => $city) {
-            $options[] = new \tete0148\EasyForm\EasyFormSelectOption($index, $city['city']);
+            $options[] = new EasyFormSelectOption($index, $city['city']);
         }
         $field->setOptions($options);
 
         $label = new EasyFormLabel();
         $label->setValue('Your message:');
         $easyform->addField('comment', 'textarea')
-                        ->setLabel($label);
+                        ->setLabel($label)
+                        ->required();
         $easyform->addField('submit', 'submit')->setAttributes(['value' => 'Submit']);
 
+        $valid = false;
         //validating form
-        if(isset($_POST[$easyform->getName()]))
-        echo ($easyform->validate($_POST)) ? 'Formulaire valide<br>' : 'Formulaire invalide</br>';
+        if(isset($_POST['demo']))
+            $valid = $easyform->validate($_POST);
 
-        if(isset($_POST[$easyform->getName()])) {
-            echo 'There are errors';
-        }
+        if($valid)
+            die('Form is ok');
 
-        //display form
+        //display form (it will display with errors once validated)
         echo $easyform->render();
     ?>
 </div>
