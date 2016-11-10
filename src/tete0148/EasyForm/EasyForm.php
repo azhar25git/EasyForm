@@ -35,6 +35,7 @@ class EasyForm {
         $this->name = $name;
         $this->method = $method;
         $this->url = $url;
+        $this->validator = new Validator();
     }
 
     /**
@@ -63,7 +64,6 @@ class EasyForm {
     {
         if(!isset($data[$this->getName()]))
             throw new \Exception('Invalid data (maybe $_POST is empty ?)');
-        $this->validator = new Validator();
         $validated = true;
 
         foreach ($this->fields as $field) {
