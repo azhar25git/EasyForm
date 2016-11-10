@@ -90,7 +90,7 @@ class EasyForm {
         $formTemplate = str_replace('{{ method }}', 'method="'.$this->method .'"', $formTemplate);
         $formTemplate = str_replace('{{ action }}', 'action="'.$this->url .'"', $formTemplate);
 
-        if($this->validated !== null) {
+        if(!empty($this->getErrors())) {
             $errorsTemplate = file_get_contents(self::$resourcesPath . '/templates/errors.html.twig');
             $errors = '<ul>';
             foreach ($this->validator->getErrors() as $field) {
@@ -177,7 +177,7 @@ class EasyForm {
         unset($attributes['value']);
 
         //errors
-        if($element instanceof EasyFormField && $this->validated !== null && isset($this->getErrors()[$element->getName()])) {
+        if($element instanceof EasyFormField && !empty($this->getErrors()) && isset($this->getErrors()[$element->getName()])) {
             $errorsTemplate = file_get_contents(self::$resourcesPath . '/templates/errors.html.twig');
             $errors = '<ul>';
             foreach ($this->getErrors()[$element->getName()] as $error) {
