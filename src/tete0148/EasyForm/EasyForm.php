@@ -54,16 +54,19 @@ class EasyForm {
      *
      * @param $data array
      * @return bool
+     * @throws \Exception
      */
     public function validate($data)
     {
+        if(!isset($data[$this->getName()]))
+            throw new \Exception('Invalid data (maybe $_POST is empty ?)');
         $this->validator = new Validator();
         $validated = true;
         foreach ($this->fields as $field) {
             $rules = $field->getRules();
             foreach ($rules as $rule) {
-                $validated = $rule->validate($data[$this->name][$field->getName()]);
-                if(!$validated) return $validated;
+                if($validated)
+                    $validated = $rule->validate($data[$this->name][$field->getName()]);
                 $this->validator->addValidated($field->getName(), $rule->getName(), $validated);
             }
         }
