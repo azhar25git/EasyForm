@@ -17,7 +17,7 @@ class AlphanumericRule extends Rule
      */
     public function validate($content)
     {
-        $regex = '#[^a-zA-Z0-9]#';
-        return preg_match($regex, $content) !== 1 AND preg_match($regex, $content) === 0;
+        $regex = '/^[a-zA-Z0-9]*$/';
+        return preg_match($regex , $content) === 1;
     }
 }
