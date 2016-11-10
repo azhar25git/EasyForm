@@ -68,7 +68,7 @@ class EasyFormField extends HTMLElement {
     /**
      * Set select field options
      *
-     * @param $optionsArray Array of instances of EasyFormSelectOption
+     * @param $optionsArray EasyFormSelectOption[] Array of instances of EasyFormSelectOption
      * @throws \Exception If the field is not a select
      * @return $this EasyFormField
      */
@@ -84,7 +84,7 @@ class EasyFormField extends HTMLElement {
     }
 
     /**
-     * @return array
+     * @return EasyFormSelectOption[]
      * @throws \Exception
      */
     public function getOptions()
@@ -131,7 +131,7 @@ class EasyFormField extends HTMLElement {
     /**
      * Get field rules
      *
-     * @return array
+     * @return Rule[]
      */
     public function getRules()
     {

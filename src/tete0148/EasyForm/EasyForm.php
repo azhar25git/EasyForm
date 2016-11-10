@@ -12,6 +12,9 @@ class EasyForm {
     private $name;
     private $method;
     private $url;
+    /**
+     * @var EasyFormField[]
+     */
     private $fields = [];
     private $allowFiles = false;
     private $validated = null;
@@ -23,9 +26,9 @@ class EasyForm {
 
     /**
      * EasyForm constructor.
-     * @param $name Name of the form
-     * @param string $url
-     * @param string $method
+     * @param $name string Name of the form
+     * @param $url string $url
+     * @param $method string $method
      */
     public function __construct($name, $url = '', $method = 'POST')
     {
@@ -37,7 +40,7 @@ class EasyForm {
     /**
      * Add a field to the form
      *
-     * @param $name Name of the field
+     * @param $name string Name of the field
      * @param string $type
      * @return EasyFormField The field
      */
@@ -62,6 +65,7 @@ class EasyForm {
             throw new \Exception('Invalid data (maybe $_POST is empty ?)');
         $this->validator = new Validator();
         $validated = true;
+
         foreach ($this->fields as $field) {
             $rules = $field->getRules();
             foreach ($rules as $rule) {
@@ -128,7 +132,7 @@ class EasyForm {
             $type = $element->getType();
 
         $attributes = $element->getAttributes();
-        $template = '';
+        $template = null;
         if($type == 'textarea') {
             $template = file_get_contents(self::$resourcesPath . '/templates/textarea.html.twig');
             //custom replacements
@@ -242,7 +246,7 @@ class EasyForm {
     }
 
     /**
-     * @return Name
+     * @return string
      */
     public function getName()
     {
