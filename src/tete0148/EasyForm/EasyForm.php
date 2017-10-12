@@ -69,9 +69,9 @@ class EasyForm {
         foreach ($this->fields as $field) {
             $rules = $field->getRules();
             foreach ($rules as $rule) {
-                if($validated)
-                    $validated = $rule->validate($data[$this->name][$field->getName()]);
+                $v = $rule->validate($data[$this->name][$field->getName()]);
                 $this->validator->addValidated($field->getName(), $rule->getName(), $validated);
+                $v = $v && $validated;
             }
         }
         $this->validated = $validated;

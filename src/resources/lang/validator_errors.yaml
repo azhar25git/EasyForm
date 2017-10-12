@@ -1,3 +1,5 @@
+# Use %# to display the field's readable name
+# Use %0, %1, %n to display rules arguments 0, 1, n
 en:
   email: "Incorrect email address"
   required: "This field is required"
@@ -11,7 +13,7 @@ en:
 
 fr:
   email: "Adresse email incorrecte"
-  required: "This field is required"
+  required: "Ce champ est requis"
   alphanumeric: "Ce champ ne doit contenir que des caractères alphanumériques"
   alpha: "Ce champ ne doit contenir que des lettres (a-z, A-Z)"
   numeric: "Ce champ ne doit contenir que des chiffres"
